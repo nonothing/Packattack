@@ -1,8 +1,6 @@
 package com.dose.packattack;
 
-import com.dose.packattack.interfaces.IConfig;
-
-public abstract class ConfigBase implements IConfig{
+public class Config {
 	private boolean debug = true;
 	private int width = 800;
 	private int height = 444;

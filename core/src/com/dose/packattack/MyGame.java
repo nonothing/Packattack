@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.dose.packattack.controller.MenuController;
 import com.dose.packattack.controller.WorldController;
 import com.dose.packattack.interfaces.IActivityRequestHandler;
-import com.dose.packattack.interfaces.IConfig;
 import com.dose.packattack.interfaces.ILink;
 import com.dose.packattack.model.MyWorld;
 import com.dose.packattack.view.Images;
@@ -15,7 +14,7 @@ import com.dose.packattack.view.WorldRenderer;
 
 public class MyGame extends   Game  {
 	
-	public static IConfig cfg;
+	public static Config cfg;
 	public static ILink links;
 	MenuController menuController;
 	WorldController worldController;

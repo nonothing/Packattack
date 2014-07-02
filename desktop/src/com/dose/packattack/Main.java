@@ -2,14 +2,13 @@ package com.dose.packattack;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.dose.packattack.ConfigPC;
 import com.dose.packattack.MyGame;
 
 import static com.dose.packattack.MyGame.cfg;
 
 public class Main {
 	public static void main(String[] args) {
-		cfg = new ConfigPC();
+		cfg = new Config();
 		LwjglApplicationConfiguration acfg = new LwjglApplicationConfiguration();
 		acfg.title = "Packattack";
 		acfg.width = cfg.getWidth();

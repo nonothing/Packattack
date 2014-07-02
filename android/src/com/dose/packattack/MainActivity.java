@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.dose.packattack.ConfigAndroid;
 import com.dose.packattack.MyGame;
 import com.dose.packattack.interfaces.IActivityRequestHandler;
 import com.google.ads.AdRequest;
@@ -30,7 +29,7 @@ public class MainActivity extends AndroidApplication implements IActivityRequest
     @Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		cfg = new ConfigAndroid();
+		cfg = new Config();
 		cfg.setDebug(false);
 		AndroidApplicationConfiguration acfg = new AndroidApplicationConfiguration();
 		links = new JLink(this);
