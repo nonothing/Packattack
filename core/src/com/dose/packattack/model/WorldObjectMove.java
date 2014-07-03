@@ -5,13 +5,15 @@ import com.dose.packattack.enumerate.ETexture;
 
 public abstract class WorldObjectMove extends WorldObject{
 
-    private EDirection direction;
+    private EDirection directionHorizontal;
+    private EDirection directionVertical;
     private final int SPEED = 4;
     protected int countImage;
     protected boolean inversTexture;
+    
     public WorldObjectMove(ETexture texture, int x, int y, int width, int height) {
         super(texture, x, y, width, height);
-        direction = EDirection.RIGHT;
+        directionHorizontal = EDirection.RIGHT;
         countImage = 0;
         inversTexture = false;
     }
@@ -22,17 +24,30 @@ public abstract class WorldObjectMove extends WorldObject{
         setRectangle(new Rectangle(getX() + speedX, getY() + speedY,
                 getWidth(), getHeight()));
     }
+    
+    public void newPosition(){
+    	setX(getRectangle().getX());
+    	setY(getRectangle().getY());
+    }
 
     protected int inverse(int number) {
         return -1 * number;
     }
 
-    public EDirection getDirection() {
-        return direction;
+    public EDirection getDirectionHorizontal() {
+        return directionHorizontal;
     }
 
-    public void setDirection(EDirection direction) {
-        this.direction = direction;
+    public void setDirectionHorizontal(EDirection direction) {
+        this.directionHorizontal = direction;
+    }
+    
+    public EDirection getDirectionVertical() {
+    	return directionVertical;
+    }
+    
+    public void setDirectionVertical(EDirection direction) {
+    	this.directionVertical = direction;
     }
 
     public int getSPEED() {

@@ -16,8 +16,6 @@ public class WorldController implements InputProcessor {
 
     private MyWorld world;
     private Timer mainTimer;
-    private MenuController menuController;
-    private SoundController soundController;
 	private WorldRenderer worldRenderer;
 	private MyGame myGame;
 	private boolean isTouch;
@@ -26,11 +24,9 @@ public class WorldController implements InputProcessor {
     private EDirection directionVertical;
     
     public WorldController(MyGame myGame, MyWorld world, WorldRenderer worldRenderer)  {
-        this.menuController = menuController;
         this.world = world;
         this.mainTimer = new Timer();//TODO timer 10
-        this.mainTimer.schedule(timerTask, 1, 10);
-        this.soundController = soundController; 
+        this.mainTimer.schedule(timerTask, 1, 20);
 		this.worldRenderer = worldRenderer;
 		this.myGame = myGame;
 		worldRenderer.setWorld(world);
@@ -79,6 +75,7 @@ public class WorldController implements InputProcessor {
 		} 
 		
 		if(touchButton(worldRenderer.getButtonUp())){
+			world.jumpPlayer();
 			directionVertical = EDirection.UP;
 		} 
 	}

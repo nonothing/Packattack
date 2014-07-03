@@ -2,8 +2,8 @@ package com.dose.packattack;
 
 public class Config {
 	private boolean debug = true;
-	private int width = 800;
-	private int height = 444;
+	private int width = 1280;
+	private int height = 800;
 	private double scaleX = 1.0;
 	private double scaleY = 1.0;
 	private boolean PC;
