@@ -3,12 +3,14 @@ package com.dose.packattack;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.dose.packattack.MyGame;
+import com.dose.packattack.model.JLinkPC;
 
-import static com.dose.packattack.MyGame.cfg;
+import static com.dose.packattack.MyGame.*;
 
 public class Main {
 	public static void main(String[] args) {
 		cfg = new Config();
+		links = new JLinkPC();
 		LwjglApplicationConfiguration acfg = new LwjglApplicationConfiguration();
 		acfg.title = "Packattack";
 		acfg.width = cfg.getWidth();

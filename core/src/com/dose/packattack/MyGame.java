@@ -25,13 +25,13 @@ public class MyGame extends   Game  {
 	public MyGame (IActivityRequestHandler ads){
 		mAds = ads;
 	}
-	public MyGame (){
-	}
+	
+	public MyGame (){}
 	
 	@Override
 	public void create() {
 		images = new Images();
-		menuController = new MenuController(this, new MenuRenderer());
+		menuController = new MenuController(this, new MenuRenderer(images));
 		worldController = new WorldController(this, new MyWorld(), new WorldRenderer(images));
 		
 		if(!cfg.isDebug()){
@@ -39,17 +39,8 @@ public class MyGame extends   Game  {
 			logo = new Logo(this);
 			setScreen(logo);
 		}else{
-			worldController.setInput();
-			setScreen(worldController.getWorldRenderer());
+			changeMenu();
 		}
-	}
-	
-	@Override
-	public void dispose() {
-		worldController = null;
-//		batch.dispose();TODO
-//		texture.dispose();TODO
-		super.dispose();
 	}
 	
 	public void changeMenu(){
@@ -61,18 +52,16 @@ public class MyGame extends   Game  {
 	public void changeGame(){
 		showAds(false);
 		worldController.setInput();
+		worldController.newGame();
 		setScreen(worldController.getWorldRenderer());
 	}
-	
-	@Override
-	public void resize(int width, int height) {
 		
-	}
-	
-	
 	private void showAds(boolean show){
 		if(mAds != null){
 			mAds.showAdMob(show);
 		}
 	}
+	
+	@Override	public void resize(int width, int height) {	}
+
 }

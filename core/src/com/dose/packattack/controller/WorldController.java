@@ -104,6 +104,10 @@ public class WorldController implements InputProcessor {
 		}
 	}
 	
+	public void newGame(){
+		world.newGame();
+	}
+	
 	private boolean touchButton(JButton button){
 		if (button.getRectangle().intersects(rectangle)) {
 			button.setZoom(isTouch);

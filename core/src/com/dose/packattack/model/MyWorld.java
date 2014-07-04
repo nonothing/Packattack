@@ -162,7 +162,6 @@ public class MyWorld {
 	private static final int EMPTY_BLOCK = 99999;
 	
 	private void movePlayer(EDirection directionHorizonal) {
-		System.out.println(player.getY() - 174);
 		if((player.getY() - 174)%76<10){
 			player.setDirectionHorizontal(directionHorizonal);
 		player.moveH();
