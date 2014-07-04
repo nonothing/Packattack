@@ -2,7 +2,6 @@ package com.dose.packattack.model;
 
 import com.dose.packattack.model.Rectangle;
 import com.dose.packattack.enumerate.ETexture;
-import static com.dose.packattack.MyGame.cfg;
 
 public class WorldObject {
     
@@ -15,8 +14,8 @@ public class WorldObject {
    
     public WorldObject(ETexture texture, int x, int y, int width, int height) {
         this.texture = texture;
-        this.x = (int)(x*cfg.getScaleX());
-        this.y = (int)(y*cfg.getScaleY());
+        this.x = x;
+        this.y = y;
         this.width = width;
         this.height = height;
         rectangle = new Rectangle(x, y, width, height);
@@ -40,7 +39,7 @@ public class WorldObject {
     }
 
     public int getWidth() {
-        return (int)(width * cfg.getScaleX());
+        return width;
     }
 
     public void setWidth(int width) {
@@ -48,7 +47,7 @@ public class WorldObject {
     }
 
     public int getHeight() {
-        return (int)(height*cfg.getScaleY()); 
+        return height; 
     }
 
     public void setHeight(int height) {

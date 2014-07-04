@@ -1,10 +1,10 @@
 package com.dose.packattack.controller;
 
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 import com.dose.packattack.MyGame;
 import com.dose.packattack.enumerate.EDirection;
 import com.dose.packattack.model.JButton;
@@ -26,13 +26,14 @@ public class WorldController implements InputProcessor {
     public WorldController(MyGame myGame, MyWorld world, WorldRenderer worldRenderer)  {
         this.world = world;
         this.mainTimer = new Timer();//TODO timer 10
-        this.mainTimer.schedule(timerTask, 1, 20);
+        this.mainTimer.schedule(timerTask, 0f, 0.002f);
+        this.mainTimer.start();
 		this.worldRenderer = worldRenderer;
 		this.myGame = myGame;
 		worldRenderer.setWorld(world);
      }
 
-    TimerTask timerTask = new TimerTask() {
+    Task timerTask = new Task() {
 		
 		@Override
 		public void run() {

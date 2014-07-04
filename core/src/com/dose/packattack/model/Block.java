@@ -1,37 +1,63 @@
 package com.dose.packattack.model;
 
-import com.dose.packattack.enumerate.EDirection;
 import com.dose.packattack.enumerate.ETexture;
-import static com.dose.packattack.MyGame.cfg;
 public class Block extends WorldObjectMove {
 
-    public boolean isMoveHorizontal;
-    public boolean isMoveVertical;
+	private boolean isLeft;
+	private boolean isRight;
+	private boolean isDown;
+	private boolean isUp;
+	
+	private static final int SIZE = 80;
     public boolean isDead;
     
-    public Block(ETexture texture, int x, int y, int width, int height) {
-        super(texture, x, y, width, height);
-        isMoveHorizontal = true;
-        isMoveVertical = true;
+    public Block(ETexture texture, int x, int y) {
+        super(texture, x, y, SIZE, SIZE);
+        isLeft = true;
+        isRight = true;
     }
 
     @Override
     void animate() {
         // do nothing
     }
-    public void move(EDirection direction, boolean vertical) {
-
-        if (direction == EDirection.RIGHT && !vertical && getX() < (int)(1200*cfg.getScaleX())) {
-            setNext(getSPEED(), 0);
-        }
-        if (direction == EDirection.LEFT && !vertical && getX() > 0) {
-            setNext(inverse(getSPEED()), 0);
-
-        }
-        if (direction == EDirection.DOWN && vertical && getY() > (int)(160 * cfg.getScaleY())) {
-            setNext(0, inverse(getSPEED()));
-        }
-        
-        
+    
+    public void move() {
+    	if(!isUp){
+    		if(!isDown){
+    			if(getY() > 140){
+    				setNext(0, inverse(getSPEED()));
+    			}
+    		}
+    		if(!isLeft){
+    			setNext(inverse(getSPEED()), 0);
+    		}
+    		if(!isRight){
+    			setNext(getSPEED(), 0);
+    		}
+    	}
     }
+    
+	public void setDown(boolean is) {
+		isDown = is;
+	}
+
+	public void setLeft(boolean is) {
+		isLeft = is;
+	}
+
+	public void setRight(boolean is) {
+		isRight = is;
+	}
+
+	public void setUp(boolean is) {
+		isUp = is;
+	}
+	
+	public void clear(){
+		isDown  = false;
+		isUp    = false;
+		isRight = false;
+		isLeft  = false;
+	}
 }

@@ -30,7 +30,7 @@ public class MainActivity extends AndroidApplication implements IActivityRequest
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		cfg = new Config();
-		cfg.setDebug(false);
+		cfg.setDebug(true);
 		AndroidApplicationConfiguration acfg = new AndroidApplicationConfiguration();
 		links = new JLink(this);
 		initDisplay();

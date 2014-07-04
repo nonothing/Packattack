@@ -2,7 +2,6 @@ package com.dose.packattack.model;
 
 import com.dose.packattack.enumerate.EDirection;
 import com.dose.packattack.enumerate.ETexture;
-import static com.dose.packattack.MyGame.cfg;
 
 public class Player extends WorldObjectMove {
     
@@ -41,7 +40,7 @@ public class Player extends WorldObjectMove {
     		setTexture(ETexture.PLAYER_0);
     	}
     	
-        if (getDirectionHorizontal() == EDirection.RIGHT && getX() < cfg.getWidth() - getWidth()) {
+        if (getDirectionHorizontal() == EDirection.RIGHT && getX() < 1280 - getWidth()) {
             setNext(getSPEED(), 0);
             inversTexture = false;
         }

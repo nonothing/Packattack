@@ -5,7 +5,6 @@ import java.util.Random;
 import com.dose.packattack.model.Rectangle;
 import com.dose.packattack.enumerate.EDirection;
 import com.dose.packattack.enumerate.ETexture;
-import static com.dose.packattack.MyGame.cfg;
 
 public class MyWorld {
 
@@ -20,14 +19,14 @@ public class MyWorld {
 		pelicans = new ArrayList<Pelican>();
 		player = new Player(ETexture.PLAYER_0, 100, 720, 80, 100);
 		random = new Random();
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 1; i++)
 			createPelican();
-		RECT= new Rectangle(0,(int)(140*cfg.getScaleY()), cfg.getWidth(), 25);
+		RECT= new Rectangle(0,140, 1280, 25);
 	}
 
 	private void createPelican() {
 		pelicans.add(new Pelican(ETexture.PELICAN_1,
-				random.nextInt(cfg.getWidth() - (int) (110 * cfg.getScaleX())),
+				80 * random.nextInt(16),
 				690, 110, 100));
 	}
 
@@ -53,16 +52,71 @@ public class MyWorld {
 			pelican.move();
 			pelican.createBlock(this);
 		}
+		for(int i =0; i < blocks.size(); i++){
+			blocks.get(i).move();
+			checkCollision(i);
+			blocks.get(i).newPosition();
+		}
+//		cheakLine();
 	}
-
+	
+	public void checkCollision(int i){
+		for(int j=0; j < blocks.size(); j++){
+			if(i != j && blocks.get(j).getRectangle().intersects(blocks.get(i).getRectangle())){
+				if(blocks.get(j).getX() > blocks.get(i).getX()){
+					blocks.get(j).setLeft(true);
+					blocks.get(i).setRight(true);
+				}
+				if(blocks.get(j).getX() < blocks.get(i).getX()){
+					blocks.get(i).setLeft(true);
+					blocks.get(j).setRight(true);
+				}
+				if(blocks.get(j).getY() < blocks.get(i).getY()){
+					blocks.get(i).setDown(true);
+					blocks.get(j).setUp(true);
+				}
+				if(blocks.get(j).getY() > blocks.get(i).getY()){
+					blocks.get(j).setDown(true);
+					blocks.get(i).setUp(true);
+				}
+			}
+		}
+	}
+	
+	private ArrayList<Block> buffer = new ArrayList<Block>(20);
+	private void cheakLine(){
+		buffer.clear();
+		for(Block block: blocks){
+			if(block.getRectangle().intersects(RECT)){
+				block.isDead = true;
+				buffer.add(block);
+			}
+		}
+		if(buffer.size() >= 16){
+			for(Block element: buffer){
+				blocks.remove(element);
+			}
+		}
+		
+	}
+	
+	private boolean collisionWithBlock(Rectangle rectangle){
+		for(Block block: blocks){
+			if(block.getRectangle().intersects(rectangle)){
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	private void movePlayer(EDirection directionHorizonal) {
 		player.setDirectionHorizontal(directionHorizonal);
 		player.moveH();
-		if(!player.getRectangle().intersects(RECT)){
+		if(!player.getRectangle().intersects(RECT) && !collisionWithBlock(player.getRectangle())){
 			player.newPosition();
 		}
 		player.moveV();
-		if(!player.getRectangle().intersects(RECT)){
+		if(!player.getRectangle().intersects(RECT) && !collisionWithBlock(player.getRectangle())){
 			player.newPosition();
 		}
 	}

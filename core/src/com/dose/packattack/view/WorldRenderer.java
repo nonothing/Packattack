@@ -67,9 +67,17 @@ public class WorldRenderer implements Screen{
 
 	private void drawMoveObject(WorldObjectMove object) {
 		if(!object.isInversTexture()){
-			batch.draw(images.getTexture(object.getTexture()), object.getX(), object.getY(),object.getWidth(),object.getHeight());
+			batch.draw(images.getTexture(object.getTexture()),
+					(int)(object.getX()*cfg.getScaleX()),
+					(int)(object.getY()*cfg.getScaleY()),
+					(int)(object.getWidth()*cfg.getScaleX()),
+					(int)(object.getHeight()*cfg.getScaleY()));
 		} else {
-			batch.draw(images.getTexture(object.getTexture()), object.getX() + object.getWidth(), object.getY(),-object.getWidth(),object.getHeight());
+			batch.draw(images.getTexture(object.getTexture()),
+					(int)(object.getX()*cfg.getScaleX()) + (int)(object.getWidth()*cfg.getScaleX()),
+					(int)(object.getY()*cfg.getScaleY()),
+					(int)(-object.getWidth()*cfg.getScaleX()),
+					(int)(object.getHeight()*cfg.getScaleY()));
 		}
 	}
 
