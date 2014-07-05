@@ -29,6 +29,14 @@ public abstract class WorldObjectMove extends WorldObject{
     	setX(getRectangle().getX());
     	setY(getRectangle().getY());
     }
+    
+	public void newPositionX() {
+		setX(getRectangle().getX());
+	}
+
+	public void newPositionY() {
+		setY(getRectangle().getY());
+	}
 
     protected int inverse(int number) {
         return -1 * number;

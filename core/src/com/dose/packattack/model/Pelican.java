@@ -50,6 +50,7 @@ public class Pelican extends WorldObjectMove {
             setNext(inverse(getSPEED()), 0);
             inversTexture = true;
             break;
+		default:break;
         }
         setX(getRectangle().getX());
         if (getX() > 1280) {
@@ -72,11 +73,10 @@ public class Pelican extends WorldObjectMove {
 
     public void createBlock(MyWorld world) {
         if (isCreateBlock && getX() == dropBlockX * 80) {
-//            if (!world.collisionWithLevel(new Rectangle(dropBlockX * 80,
-//                    getY(), 80, 80))) {
+            if (!world.check(new Rectangle(dropBlockX * 80, getY(), 80, 80))) {
                 world.createBlock(getX(), getY());
-//                isCreateBlock = false;
-//            }
+                isCreateBlock = false;
+            }
         } else {
             dropBlockX = new Random().nextInt(16);
         }

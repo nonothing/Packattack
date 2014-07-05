@@ -26,7 +26,7 @@ public class WorldController implements InputProcessor {
     public WorldController(MyGame myGame, MyWorld world, WorldRenderer worldRenderer)  {
         this.world = world;
         this.mainTimer = new Timer();//TODO timer 10
-        this.mainTimer.schedule(timerTask, 0f, 0.002f);
+        this.mainTimer.schedule(timerTask, 0f, 0.02f);
         this.mainTimer.start();
 		this.worldRenderer = worldRenderer;
 		this.myGame = myGame;

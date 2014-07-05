@@ -20,6 +20,13 @@ public class Images {
 		textures.put(ETexture.PLAYER_4, loadTexture("player_4"));
 		textures.put(ETexture.PLAYER_5, loadTexture("player_5"));
 		textures.put(ETexture.PLAYER_6, loadTexture("player_6"));
+//		textures.put(ETexture.PLAYER_0, loadTexture("test"));
+//		textures.put(ETexture.PLAYER_1, loadTexture("test"));
+//		textures.put(ETexture.PLAYER_2, loadTexture("test"));
+//		textures.put(ETexture.PLAYER_3, loadTexture("test"));
+//		textures.put(ETexture.PLAYER_4, loadTexture("test"));
+//		textures.put(ETexture.PLAYER_5, loadTexture("test"));
+//		textures.put(ETexture.PLAYER_6, loadTexture("test"));
 
 		textures.put(ETexture.PELICAN_1, loadTexture("dragon1"));
 		textures.put(ETexture.PELICAN_2, loadTexture("dragon2"));

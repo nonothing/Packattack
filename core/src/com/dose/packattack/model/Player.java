@@ -51,7 +51,7 @@ public class Player extends WorldObjectMove {
         }
        
     }
-
+    
     public void moveV(){
     	if(getDirectionVertical() == EDirection.DOWN){
     		setNext(0, inverse(getSPEED()));
@@ -67,7 +67,6 @@ public class Player extends WorldObjectMove {
     	}
     }
     
-    
     public boolean isDead() {
         return isDead;
     }
@@ -75,5 +74,9 @@ public class Player extends WorldObjectMove {
     public void setDead(boolean isDead) {
         this.isDead = isDead;
     }
-
+    
+    public Rectangle getRectH(){
+    	return new Rectangle(getRectangle().getX(), getRectangle().getY(), getRectangle().getWigth(), getRectangle().getHeight() - 30);
+    }
+    
 }

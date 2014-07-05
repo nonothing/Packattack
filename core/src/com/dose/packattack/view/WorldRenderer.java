@@ -2,13 +2,17 @@ package com.dose.packattack.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.dose.packattack.enumerate.ETexture;
 import com.dose.packattack.model.Block;
 import com.dose.packattack.model.JButton;
 import com.dose.packattack.model.MyWorld;
 import com.dose.packattack.model.Pelican;
+import com.dose.packattack.model.Rectangle;
 import com.dose.packattack.model.WorldObjectMove;
 
 import static com.dose.packattack.MyGame.cfg;
@@ -21,13 +25,15 @@ public class WorldRenderer implements Screen{
 	private JButton buttonLeft;
 	private JButton buttonRight;
 	private JButton buttonUp;
+	private ShapeRenderer renderer;
 	
 	public WorldRenderer(Images images) {
 		batch = new SpriteBatch();
+		renderer = new ShapeRenderer();
 		this.images = images;
-		buttonLeft = new JButton("btn_move", 10, 10, 79, 76);
-		buttonRight = new JButton("btn_move", 100, 10, 79, 76);
-		buttonUp = new JButton("btn_move", 900, 10, 79, 76);
+		buttonLeft = new JButton("btn_move", 30, 40, 79, 76);
+		buttonRight = new JButton("btn_move", 120, 40, 79, 76);
+		buttonUp = new JButton("btn_move", 900, 40, 79, 76);
 	}
 	
 	public void setWorld(MyWorld world){
@@ -49,6 +55,15 @@ public class WorldRenderer implements Screen{
 		drawMoveObject(world.getPlayer());
 		drawButton();
 		batch.end();
+		
+//		renderer.begin(ShapeType.Line);
+//		drawLinesObjct(world.getPlayer());
+//		for(Block block : world.getBlocks()){
+//			drawLinesObjct(block);
+//		}
+//		renderer.setColor(Color.BLACK);
+//		
+//		renderer.end();
 	}
 	
 	private void drawButton(){
@@ -65,6 +80,20 @@ public class WorldRenderer implements Screen{
 				(float) buttonUp.getHeight(), 1, 1, 270);
 	}
 
+	private void drawLinesObjct(WorldObjectMove object){
+		Rectangle r = object.getRectangle();
+		//crossroad
+		renderer.line(r.getX(), r.getY(), r.getX() + r.getWigth(),r.getY() + r.getHeight());
+		renderer.line(r.getX(), r.getY() + r.getHeight(), r.getX() + r.getWigth(),r.getY());
+		//lines
+		renderer.line(r.getX(), r.getY(), r.getX() + r.getWigth(),r.getY());
+		renderer.line(r.getX(), r.getY() + r.getHeight(), r.getX() + r.getWigth(),r.getY() + r.getHeight());
+		
+		renderer.line(r.getX(), r.getY(), r.getX(),r.getY() + r.getHeight());
+		renderer.line(r.getX()+r.getWigth(), r.getY(), r.getX()+r.getWigth(),r.getY() + r.getHeight());
+		
+	}
+	
 	private void drawMoveObject(WorldObjectMove object) {
 		if(!object.isInversTexture()){
 			batch.draw(images.getTexture(object.getTexture()),
