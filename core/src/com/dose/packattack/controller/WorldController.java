@@ -26,8 +26,8 @@ public class WorldController implements InputProcessor {
     
     public WorldController(MyGame myGame, MyWorld world, WorldRenderer worldRenderer)  {
         this.world = world;
-        this.mainTimer = new Timer();//TODO timer 10
-        this.mainTimer.schedule(timerTask, 0f, 0.02f);
+        this.mainTimer = new Timer();
+        Timer.schedule(timerTask, 0f, 0.02f);
         this.mainTimer.start();
 		this.view = worldRenderer;
 		this.myGame = myGame;
@@ -53,26 +53,27 @@ public class WorldController implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		createRectangle(x, y, true);
-		touchButton();
+		touchButton(x, y, true);
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) {
-		createRectangle(x, y, true);
-		touchButton();
+		touchButton(x, y, true);
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
-		createRectangle(x, y, false);
-		touchButton();
+		touchButton(x, y, false);
 		return true;
 	}
 	
-	private void touchButton(){
+	private void touchButton(int x, int y, boolean touch){
+		
+		isTouch = touch;
+		rectangle = new Rectangle(x,Gdx.graphics.getHeight() - y , 2, 2);
+		
 		if(touchButton(view.getButtonLeft())){
 			directionHorizontal = EDirection.LEFT;
 		}
@@ -120,11 +121,6 @@ public class WorldController implements InputProcessor {
 			button.setZoom(false);
 			return false;
 		}	
-	}
-	
-	private void createRectangle(int x, int y, boolean touch) {
-		isTouch = touch;
-		rectangle = new Rectangle(x,Gdx.graphics.getHeight() - y , 2, 2);
 	}
 	
 	public WorldRenderer getWorldRenderer(){

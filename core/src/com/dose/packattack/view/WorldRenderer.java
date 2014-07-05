@@ -1,5 +1,7 @@
 package com.dose.packattack.view;
 
+import static com.dose.packattack.MyGame.cfg;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -16,12 +18,10 @@ import com.dose.packattack.model.Rectangle;
 import com.dose.packattack.model.Score;
 import com.dose.packattack.model.WorldObjectMove;
 
-import static com.dose.packattack.MyGame.cfg;
-
 public class WorldRenderer implements Screen{
 	
-	private final int FULL_HEIGHT = 800 ;
-	private final int FULL_WIDTH = 1280;
+	public static final int FULL_HEIGHT = 800 ;
+	public static final int FULL_WIDTH = 1280;
 	
 	private MyWorld world;
 	private SpriteBatch batch;
@@ -69,14 +69,18 @@ public class WorldRenderer implements Screen{
 		score.draw(batch);
 		batch.end();
 		
-//		renderer.begin(ShapeType.Line);
-//		drawLinesObjct(world.getPlayer());
-//		for(Block block : world.getBlocks()){
-//			drawLinesObjct(block);
-//		}
-//		renderer.setColor(Color.BLACK);
-//		
-//		renderer.end();
+//		drawDebug();
+	}
+
+	private void drawDebug() {
+		renderer.begin(ShapeType.Line);
+		drawLinesObjct(world.getPlayer());
+		for(Block block : world.getBlocks()){
+			drawLinesObjct(block);
+		}
+		renderer.setColor(Color.BLACK);
+		
+		renderer.end();
 	}
 	
 	private void drawButton(){

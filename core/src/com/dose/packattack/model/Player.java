@@ -3,9 +3,14 @@ package com.dose.packattack.model;
 import com.dose.packattack.enumerate.EDirection;
 import com.dose.packattack.enumerate.ETexture;
 
+import static com.dose.packattack.view.WorldRenderer.FULL_WIDTH;
+
 public class Player extends WorldObjectMove {
     
-    private boolean isDead;
+    private static final int MAX_COUNT_IMAGE = 6 * 8;
+	private static final int TIME_JUMP = 15;
+	
+	private boolean isDead;
     private int countHeightJump;
     
     public Player(ETexture texture, int x, int y, int width, int height) {
@@ -28,7 +33,7 @@ public class Player extends WorldObjectMove {
         }
         
         countImage++;
-        if (countImage == 48){
+        if (countImage >= MAX_COUNT_IMAGE){
         	countImage = 0;
         }
     }
@@ -40,7 +45,7 @@ public class Player extends WorldObjectMove {
     		setTexture(ETexture.PLAYER_0);
     	}
     	
-        if (getDirectionHorizontal() == EDirection.RIGHT && getX() < 1280 - getWidth()) {
+        if (getDirectionHorizontal() == EDirection.RIGHT && getX() < FULL_WIDTH - getWidth()) {
             setNext(getSPEED(), 0);
             inversTexture = false;
         }
@@ -60,7 +65,7 @@ public class Player extends WorldObjectMove {
     	if(getDirectionVertical() == EDirection.UP){
     		setNext(0, getSPEED()*2);
     		countHeightJump++;
-    		if(countHeightJump >= 15){
+    		if(countHeightJump >= TIME_JUMP){
     			countHeightJump = 0;
     			setDirectionVertical(EDirection.DOWN);
     		}
@@ -76,7 +81,7 @@ public class Player extends WorldObjectMove {
     }
     
     public Rectangle getRectH(){
-    	return new Rectangle(getRectangle().getX(), getRectangle().getY(), getRectangle().getWigth(), getRectangle().getHeight() - 30);
+    	return new Rectangle(getRectangle().getX(), getRectangle().getY(), getRectangle().getWigth(), getRectangle().getHeight() - getSPEED());
     }
     
 }

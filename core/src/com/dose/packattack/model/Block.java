@@ -2,40 +2,38 @@ package com.dose.packattack.model;
 
 import com.dose.packattack.enumerate.EDirection;
 import com.dose.packattack.enumerate.ETexture;
+import static com.dose.packattack.model.MyWorld.SIZE_BLOCK;
+import static com.dose.packattack.view.WorldRenderer.FULL_WIDTH;
+
 public class Block extends WorldObjectMove {
 
+	private static final int BOTTOM = 172;
 	public boolean isLeft;
 	public boolean isRight;
 	public boolean isDown;
 	public boolean isUp;
 	public boolean isActive;
-	private static final int SIZE = 80;
     public boolean isDead;
     
     public Block(ETexture texture, int x, int y) {
-        super(texture, x, y, SIZE, SIZE);
+        super(texture, x, y, SIZE_BLOCK, SIZE_BLOCK);
         setDirectionHorizontal(EDirection.NONE);
     }
 
-    @Override
-    void animate() {
-        // do nothing
-    }
-    
 	public void moveH() {
 		if (!isLeft && getDirectionHorizontal() == EDirection.LEFT && isActive) {
 			if (getX() > 0)
 				setNext(inverse(getSPEED()), 0);
-			if (getRectangle().getX() % 80 == 0) {
+			if (getRectangle().getX() % SIZE_BLOCK == 0) {
 				setDirectionHorizontal(EDirection.NONE);
 				isActive = false;
 			}
 		}
 		if (!isRight && getDirectionHorizontal() == EDirection.RIGHT
 				&& isActive) {
-			if (getX() < 1280 - getWidth())
+			if (getX() < FULL_WIDTH - getWidth())
 				setNext(getSPEED(), 0);
-			if (getRectangle().getX() % 80 == 0) {
+			if (getRectangle().getX() % SIZE_BLOCK == 0) {
 				setDirectionHorizontal(EDirection.NONE);
 				isActive = false;
 			}
@@ -45,7 +43,7 @@ public class Block extends WorldObjectMove {
 	public void moveV() {
 		if (!isUp) {
 			if (!isDown) {
-				if (getY() > 172) {
+				if (getY() > BOTTOM) {
 					setNext(0, inverse(getSPEED()));
 				} else {
 					isDown = true;
@@ -56,7 +54,6 @@ public class Block extends WorldObjectMove {
 
 	public boolean isActive(){
 		return getDirectionHorizontal() == EDirection.NONE;
-			
 	}
 	
 	public void setDown(boolean is) {
@@ -73,6 +70,11 @@ public class Block extends WorldObjectMove {
 
 	public void setUp(boolean is) {
 		isUp = is;
+	}
+	
+	@Override
+	void animate() {
+		// do nothing
 	}
 	
 	public void clear(){

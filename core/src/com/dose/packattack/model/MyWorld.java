@@ -5,9 +5,16 @@ import java.util.Random;
 import com.dose.packattack.model.Rectangle;
 import com.dose.packattack.enumerate.EDirection;
 import com.dose.packattack.enumerate.ETexture;
+import static com.dose.packattack.controller.WorldController.PAUSE;
 
 public class MyWorld {
 
+	private static final int BOTTOM = 170;
+	public static final int LINE_BLOCKS = 16;
+	private static final int EMPTY_BLOCK = 99999;
+	public static final int SIZE_BLOCK = 80;
+	
+	private ArrayList<Block> bufferBlocks = new ArrayList<Block>(20);
 	private Player player;
 	private ArrayList<Block> blocks;
 	private ArrayList<Pelican> pelicans;
@@ -31,13 +38,15 @@ public class MyWorld {
 		blocks.clear();
 		pelicans.clear();
 		player = new Player(ETexture.PLAYER_0, 80, 178, 80, 80);
-		for (int i = 0; i < 5; i++)
+		player.setDead(false);
+		for (int i = 0; i < 5; i++){
 			createPelican();
+		}
 	}
 	
 	private void createPelican() {
 		pelicans.add(new Pelican(ETexture.PELICAN_1,
-				80 * random.nextInt(16),
+				SIZE_BLOCK * random.nextInt(LINE_BLOCKS),
 				690, 110, 100));
 	}
 
@@ -53,14 +62,18 @@ public class MyWorld {
 	}
 	
 	public void jumpPlayer(){
-		if(player.getRectangle().intersects(RECT) || collisionWithBlock(player.getRectangle())!= EMPTY_BLOCK){
+		if (player.getRectangle().intersects(RECT) || collisionWithBlock(player.getRectangle()) != EMPTY_BLOCK) {
 			player.setDirectionVertical(EDirection.UP);
 		}
 	}
 
 	public void goPlayer(EDirection directionHorizonal,	EDirection directionVertical) {
-		movePlayer(directionHorizonal);
 		
+		if(player.isDead()){
+			PAUSE = true;
+		}
+		
+		movePlayer(directionHorizonal);
 		for (Pelican pelican : pelicans) {
 			pelican.move();
 			pelican.createBlock(this);
@@ -82,42 +95,43 @@ public class MyWorld {
 		cheakLine();
 	}
 	
-	public boolean checkCollision(int i, boolean V){
+	public boolean checkCollision(int i, boolean isVertical) {
 		blocks.get(i).clear();
 		boolean result = false;
-		for(int j=0; j < blocks.size(); j++){
-			if(i != j && blocks.get(i).getRectangle().intersects(blocks.get(j).getRectangle())){
-				if(V){
-					if(blocks.get(i).getY() >= blocks.get(j).getY()){
+		for (int j = 0; j < blocks.size(); j++) {
+			if (i != j && blocks.get(i).getRectangle().intersects(blocks.get(j).getRectangle())) {
+				if (isVertical) {
+					if (blocks.get(i).getY() >= blocks.get(j).getY()) {
 						blocks.get(i).setDown(true);
 						blocks.get(j).setUp(true);
 					}
 				} else {
-					if(blocks.get(j).getX() >= blocks.get(i).getX()){
+					if (blocks.get(j).getX() >= blocks.get(i).getX()) {
 						blocks.get(j).setLeft(true);
 						blocks.get(i).setRight(true);
-					}else{
+					} else {
 						blocks.get(i).setLeft(true);
 						blocks.get(j).setRight(true);
 					}
 				}
-				if(!result)result = true;
+				if (!result) {
+					result = true;
+				}
 			}
 		}
 		return result;
 	}
 	
-	private ArrayList<Block> buffer = new ArrayList<Block>(20);
 	private void cheakLine(){
-		buffer.clear();
+		bufferBlocks.clear();
 		for(Block block: blocks){
 			if(block.getRectangle().intersects(RECT)){
 				block.isDead = true;
-				buffer.add(block);
+				bufferBlocks.add(block);
 			}
 		}
-		if(buffer.size() >= 16){
-			for(Block element: buffer){
+		if(bufferBlocks.size() >= LINE_BLOCKS){
+			for(Block element: bufferBlocks){
 				blocks.remove(element);
 			}
 			for(Block block: blocks){
@@ -159,50 +173,77 @@ public class MyWorld {
 		return false;
 	}
 	
-	private static final int EMPTY_BLOCK = 99999;
-	
 	private void movePlayer(EDirection directionHorizonal) {
-		if((player.getY() - 174)%76<10){
+		if ((player.getY() - 174) % 76 < 10) {
 			player.setDirectionHorizontal(directionHorizonal);
-		player.moveH();
+			player.moveH();
+		}
 		int[] moveBlocks = collisionWithBlocks(player.getRectH());
 		if(collisionWithBlock(player.getRectangle()) != EMPTY_BLOCK){
 			player.setNext(0, 0);
-			for(int i=0; i < blocks.size(); i++){
-				int moveBlock = moveBlocks[i];
-				if(moveBlock != EMPTY_BLOCK){
-					if(!blocks.get(moveBlock).isUp && (blocks.get(moveBlock).getY()-170)%80==0){
-						if(blocks.get(moveBlock).getX() > player.getX() && player.getDirectionHorizontal() == EDirection.RIGHT){
-							blocks.get(moveBlock).isActive = true;
-							blocks.get(moveBlock).setDirectionHorizontal(EDirection.RIGHT);
-							blocks.get(moveBlock).moveH();
-							if(checkCollision(i, false)){
-								blocks.get(moveBlock).setNext(-4, 0);
-								blocks.get(moveBlock).newPositionX();
-							}
-						} 
-						if(blocks.get(moveBlock).getX() < player.getX() && player.getDirectionHorizontal() == EDirection.LEFT){
-							blocks.get(moveBlock).isActive = true;
-							blocks.get(moveBlock).setDirectionHorizontal(EDirection.LEFT);
-							blocks.get(moveBlock).moveH();
-							if(checkCollision(i, false)){
-								blocks.get(moveBlock).setNext(4, 0);
-								blocks.get(moveBlock).newPositionX();
-							} 
-						} 
+			for (int index = 0; index < blocks.size(); index++) {
+				if(moveBlocks[index] != EMPTY_BLOCK){
+					if(checkIsMoveBlock(moveBlocks[index])){
+						moveBlock(index, moveBlocks[index], EDirection.RIGHT); 
+						moveBlock(index, moveBlocks[index], EDirection.LEFT); 
 					} 
+					player.setDead(checkDead(moveBlocks[index]));
 				}
 			}
 		}
 		if(collisionWithBlock(player.getRectangle()) == EMPTY_BLOCK){
 			player.newPositionX();
 		}
-		}
 		
 		player.moveV();
 		if(!player.getRectangle().intersects(RECT) && collisionWithBlock(player.getRectangle()) == EMPTY_BLOCK ){
 			player.newPositionY();
 		}
+	}
+	
+	private boolean checkIsMoveBlock(int index) {
+		return !blocks.get(index).isUp	&& (blocks.get(index).getY() - BOTTOM) % SIZE_BLOCK == 0;
+	}
+	
+	private boolean checkDirection(int index, EDirection direction){
+		if(direction == EDirection.RIGHT && blocks.get(index).getX() > player.getX()){
+			return  true;
+		}
+		if(direction == EDirection.LEFT && blocks.get(index).getX() < player.getX()){
+			return true;
+		}
+		return false;
+	}
+
+	private void moveBlock(int i, int moveBlock, EDirection direction) {
+		if(checkDirection(moveBlock, direction)){
+			blocks.get(moveBlock).isActive = true;
+			blocks.get(moveBlock).setDirectionHorizontal(direction);
+			blocks.get(moveBlock).moveH();
+			if(checkCollision(i, false)){
+				blocks.get(moveBlock).setNext(getSpeed(direction), 0);
+				blocks.get(moveBlock).newPositionX();
+			}
+		}
+	}
+	
+	private int getSpeed(EDirection direction) {
+		if (direction == EDirection.RIGHT) {
+			return -4;
+		}
+		if (direction == EDirection.LEFT) {
+			return 4;
+		}
+		return 0;
+	}
+
+	private boolean checkDead(int moveBlock) {
+		Block block = blocks.get(moveBlock);
+		return block.getY() >= player.getY()
+				&& ((block.getX() > player.getX() && block.getX() < player
+						.getX() + player.getWidth()) || (block.getX()
+						+ block.getWidth() > player.getX() && block.getX()
+						+ block.getWidth() < player.getX() + player.getWidth()));
 	}
 
 	public Player getPlayer() {

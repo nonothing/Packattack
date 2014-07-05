@@ -7,6 +7,8 @@ import com.dose.packattack.model.JButton;
 import com.dose.packattack.model.Rectangle;
 import com.dose.packattack.view.MenuRenderer;
 
+import static com.dose.packattack.MyGame.links;
+
 public class MenuController implements InputProcessor{
 
 	private MenuRenderer view;
@@ -53,11 +55,11 @@ public class MenuController implements InputProcessor{
 		}
 		
 		if(touchButton(view.getButtonRate())){
-			game.links.showMyGame();
+			links.showMyGame();
 		}
 		
 		if(touchButton(view.getButtonMoreGames())){
-			game.links.showMoreGames();
+			links.showMoreGames();
 		}
 	}
 	
