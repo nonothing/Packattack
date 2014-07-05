@@ -60,7 +60,7 @@ public class Player extends WorldObjectMove {
     	if(getDirectionVertical() == EDirection.UP){
     		setNext(0, getSPEED()*2);
     		countHeightJump++;
-    		if(countHeightJump >= 20){
+    		if(countHeightJump >= 15){
     			countHeightJump = 0;
     			setDirectionVertical(EDirection.DOWN);
     		}

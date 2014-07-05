@@ -16,28 +16,34 @@ public class WorldController implements InputProcessor {
 
     private MyWorld world;
     private Timer mainTimer;
-	private WorldRenderer worldRenderer;
+	private WorldRenderer view;
 	private MyGame myGame;
 	private boolean isTouch;
 	private Rectangle rectangle;
 	private EDirection directionHorizontal;
     private EDirection directionVertical;
+    public static boolean PAUSE;
     
     public WorldController(MyGame myGame, MyWorld world, WorldRenderer worldRenderer)  {
         this.world = world;
         this.mainTimer = new Timer();//TODO timer 10
         this.mainTimer.schedule(timerTask, 0f, 0.02f);
         this.mainTimer.start();
-		this.worldRenderer = worldRenderer;
+		this.view = worldRenderer;
 		this.myGame = myGame;
 		worldRenderer.setWorld(world);
+		directionHorizontal = EDirection.NONE;
+		directionVertical = EDirection.NONE;
      }
 
     Task timerTask = new Task() {
 		
 		@Override
 		public void run() {
-			 world.goPlayer(directionHorizontal, directionVertical);
+			if(!PAUSE){
+				world.goPlayer(directionHorizontal, directionVertical);
+				view.getScore().setCount(world.getScore());
+			}
 		}
 	};
 	
@@ -67,18 +73,35 @@ public class WorldController implements InputProcessor {
 	}
 	
 	private void touchButton(){
-		if(touchButton(worldRenderer.getButtonLeft())){
+		if(touchButton(view.getButtonLeft())){
 			directionHorizontal = EDirection.LEFT;
 		}
 		
-		if(touchButton(worldRenderer.getButtonRight())){
+		if(touchButton(view.getButtonRight())){
 			directionHorizontal = EDirection.RIGHT;
 		} 
 		
-		if(touchButton(worldRenderer.getButtonUp())){
+		if(touchButton(view.getButtonUp())){
 			world.jumpPlayer();
 			directionVertical = EDirection.UP;
 		} 
+		if(touchButton(view.getButtonPause())){
+			if(PAUSE){
+				PAUSE = false;
+			} else {
+				PAUSE = true;
+			}
+		} 
+		
+		if(PAUSE){
+			if(touchButton(view.getPopapMenu().getButtonNext())){
+				PAUSE = false;
+			}
+			if(touchButton(view.getPopapMenu().getButtonRetry())){
+				world.newGame();
+				PAUSE = false;
+			}
+		}
 	}
 	
 	private boolean touchButton(JButton button){
@@ -101,7 +124,7 @@ public class WorldController implements InputProcessor {
 	}
 	
 	public WorldRenderer getWorldRenderer(){
-		return worldRenderer;
+		return view;
 	}
 	
 	@Override	public boolean keyDown(int keyCode) {		return true;	}

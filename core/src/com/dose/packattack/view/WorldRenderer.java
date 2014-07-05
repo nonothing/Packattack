@@ -13,11 +13,15 @@ import com.dose.packattack.model.JButton;
 import com.dose.packattack.model.MyWorld;
 import com.dose.packattack.model.Pelican;
 import com.dose.packattack.model.Rectangle;
+import com.dose.packattack.model.Score;
 import com.dose.packattack.model.WorldObjectMove;
 
 import static com.dose.packattack.MyGame.cfg;
 
 public class WorldRenderer implements Screen{
+	
+	private final int FULL_HEIGHT = 800 ;
+	private final int FULL_WIDTH = 1280;
 	
 	private MyWorld world;
 	private SpriteBatch batch;
@@ -25,15 +29,22 @@ public class WorldRenderer implements Screen{
 	private JButton buttonLeft;
 	private JButton buttonRight;
 	private JButton buttonUp;
+	private JButton buttonPause;
 	private ShapeRenderer renderer;
+	private PopapMenuRenderer popapMenuRenderer;
+	private Score score;
 	
 	public WorldRenderer(Images images) {
 		batch = new SpriteBatch();
 		renderer = new ShapeRenderer();
 		this.images = images;
+		popapMenuRenderer = new PopapMenuRenderer(images);
+		score = new Score(images,FULL_WIDTH-130,FULL_HEIGHT-55,30,35);
 		buttonLeft = new JButton("btn_move", 30, 40, 79, 76);
 		buttonRight = new JButton("btn_move", 120, 40, 79, 76);
 		buttonUp = new JButton("btn_move", 900, 40, 79, 76);
+		buttonPause = new JButton("btn_pause", 16, 720, 64, 64);
+		score.setCount(1);
 	}
 	
 	public void setWorld(MyWorld world){
@@ -54,6 +65,8 @@ public class WorldRenderer implements Screen{
 		}
 		drawMoveObject(world.getPlayer());
 		drawButton();
+		popapMenuRenderer.draw(batch);
+		score.draw(batch);
 		batch.end();
 		
 //		renderer.begin(ShapeType.Line);
@@ -67,6 +80,7 @@ public class WorldRenderer implements Screen{
 	}
 	
 	private void drawButton(){
+		batch.draw(buttonPause.getImage(), buttonPause.getX(), buttonPause.getY(), buttonPause.getWidth(), buttonPause.getHeight());
 		batch.draw(buttonLeft.getImage(), buttonLeft.getX(), buttonLeft.getY(), buttonLeft.getWidth(), buttonLeft.getHeight());
 		batch.draw(buttonRight.getImage(), (float) buttonRight.getX(),
 				(float) buttonRight.getY(), (float) buttonRight.getWidth() / 2,
@@ -125,6 +139,18 @@ public class WorldRenderer implements Screen{
 	
 	public JButton getButtonUp(){
 		return buttonUp;
+	}
+	
+	public JButton getButtonPause(){
+		return buttonPause;
+	}
+	
+	public PopapMenuRenderer getPopapMenu(){
+		return popapMenuRenderer;
+	}
+	
+	public Score getScore(){
+		return score;
 	}
 	
 	@Override	public void dispose() {	}

@@ -20,6 +20,18 @@ public class Images {
 		textures.put(ETexture.PLAYER_4, loadTexture("player_4"));
 		textures.put(ETexture.PLAYER_5, loadTexture("player_5"));
 		textures.put(ETexture.PLAYER_6, loadTexture("player_6"));
+		
+		textures.put(ETexture.DIGITAL_0, loadTexture("number0"));
+		textures.put(ETexture.DIGITAL_1, loadTexture("number1"));
+		textures.put(ETexture.DIGITAL_2, loadTexture("number2"));
+		textures.put(ETexture.DIGITAL_3, loadTexture("number3"));
+		textures.put(ETexture.DIGITAL_4, loadTexture("number4"));
+		textures.put(ETexture.DIGITAL_5, loadTexture("number5"));
+		textures.put(ETexture.DIGITAL_6, loadTexture("number6"));
+		textures.put(ETexture.DIGITAL_7, loadTexture("number7"));
+		textures.put(ETexture.DIGITAL_8, loadTexture("number8"));
+		textures.put(ETexture.DIGITAL_9, loadTexture("number9"));
+		
 //		textures.put(ETexture.PLAYER_0, loadTexture("test"));
 //		textures.put(ETexture.PLAYER_1, loadTexture("test"));
 //		textures.put(ETexture.PLAYER_2, loadTexture("test"));
@@ -34,6 +46,7 @@ public class Images {
 		textures.put(ETexture.PELICAN_4, loadTexture("dragon4"));
 
 		textures.put(ETexture.CUBE_WOOD, loadTexture("box"));
+		textures.put(ETexture.POPAP_BACKGROUND, loadTexture("popap_background"));
 		
 	}
 	

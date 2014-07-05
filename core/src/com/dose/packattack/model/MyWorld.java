@@ -13,6 +13,7 @@ public class MyWorld {
 	private ArrayList<Pelican> pelicans;
 	private final Rectangle RECT;
 	private final Random random;
+	private int score;
 
 	public MyWorld() {
 		blocks = new ArrayList<Block>();
@@ -25,6 +26,15 @@ public class MyWorld {
 		RECT= new Rectangle(0,140, 1280, 32);
 	}
 
+	public void newGame(){
+		score = 0;
+		blocks.clear();
+		pelicans.clear();
+		player = new Player(ETexture.PLAYER_0, 80, 178, 80, 80);
+		for (int i = 0; i < 5; i++)
+			createPelican();
+	}
+	
 	private void createPelican() {
 		pelicans.add(new Pelican(ETexture.PELICAN_1,
 				80 * random.nextInt(16),
@@ -34,8 +44,10 @@ public class MyWorld {
 	public void createBlock(int x, int y) {
 		if (new Random().nextInt(2) == 0) {
 			blocks.add(new Block(ETexture.CUBE_WOOD, x, y));
+			score += 15;
 		} else {
 			blocks.add(new Block(ETexture.CUBE_WOOD, x, y));
+			score += 25;
 		}
 
 	}
@@ -112,6 +124,7 @@ public class MyWorld {
 					block.isDown = false;
 					block.isUp = false;
 			}	
+			score += 250;
 		}
 		
 	}
@@ -149,6 +162,8 @@ public class MyWorld {
 	private static final int EMPTY_BLOCK = 99999;
 	
 	private void movePlayer(EDirection directionHorizonal) {
+		System.out.println(player.getY() - 174);
+		if((player.getY() - 174)%76<10){
 			player.setDirectionHorizontal(directionHorizonal);
 		player.moveH();
 		int[] moveBlocks = collisionWithBlocks(player.getRectH());
@@ -183,9 +198,9 @@ public class MyWorld {
 		if(collisionWithBlock(player.getRectangle()) == EMPTY_BLOCK){
 			player.newPositionX();
 		}
+		}
 		
 		player.moveV();
-		System.out.println(player.getY());
 		if(!player.getRectangle().intersects(RECT) && collisionWithBlock(player.getRectangle()) == EMPTY_BLOCK ){
 			player.newPositionY();
 		}
@@ -201,5 +216,9 @@ public class MyWorld {
 
 	public ArrayList<Pelican> getPelicans() {
 		return pelicans;
+	}
+
+	public int getScore() {
+		return score;
 	}
 }
