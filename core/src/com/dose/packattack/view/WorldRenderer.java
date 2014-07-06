@@ -40,9 +40,9 @@ public class WorldRenderer implements Screen{
 		this.images = images;
 		popapMenuRenderer = new PopapMenuRenderer(images);
 		score = new Score(images,FULL_WIDTH-130,FULL_HEIGHT-55,30,35);
-		buttonLeft = new JButton("btn_move", 30, 40, 79, 76);
-		buttonRight = new JButton("btn_move", 120, 40, 79, 76);
-		buttonUp = new JButton("btn_move", 900, 40, 79, 76);
+		buttonLeft = new JButton("btn_move", 30, 40, 128, 122);
+		buttonRight = new JButton("btn_move", 180, 40, 128, 122);
+		buttonUp = new JButton("btn_move", 1100, 40, 128, 122);
 		buttonPause = new JButton("btn_pause", 16, 720, 64, 64);
 		score.setCount(1);
 	}

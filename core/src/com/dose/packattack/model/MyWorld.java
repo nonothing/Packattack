@@ -6,6 +6,7 @@ import com.dose.packattack.model.Rectangle;
 import com.dose.packattack.enumerate.EDirection;
 import com.dose.packattack.enumerate.ETexture;
 import static com.dose.packattack.controller.WorldController.PAUSE;
+import static com.dose.packattack.view.WorldRenderer.FULL_WIDTH;
 
 public class MyWorld {
 
@@ -19,6 +20,7 @@ public class MyWorld {
 	private ArrayList<Block> blocks;
 	private ArrayList<Pelican> pelicans;
 	private final Rectangle RECT;
+	private final Rectangle RECT2;
 	private final Random random;
 	private int score;
 
@@ -30,7 +32,8 @@ public class MyWorld {
 		for (int i = 0; i < 5; i++)
 			createPelican();
 		
-		RECT= new Rectangle(0,140, 1280, 32);
+		RECT= new Rectangle(0,140, FULL_WIDTH, 28);
+		RECT2= new Rectangle(0,140, FULL_WIDTH, 40);
 	}
 
 	public void newGame(){
@@ -125,7 +128,7 @@ public class MyWorld {
 	private void cheakLine(){
 		bufferBlocks.clear();
 		for(Block block: blocks){
-			if(block.getRectangle().intersects(RECT)){
+			if(block.getRectangle().intersects(RECT2)){
 				block.isDead = true;
 				bufferBlocks.add(block);
 			}
@@ -177,22 +180,23 @@ public class MyWorld {
 		if ((player.getY() - 174) % 76 < 10) {
 			player.setDirectionHorizontal(directionHorizonal);
 			player.moveH();
-		}
-		int[] moveBlocks = collisionWithBlocks(player.getRectH());
-		if(collisionWithBlock(player.getRectangle()) != EMPTY_BLOCK){
-			player.setNext(0, 0);
-			for (int index = 0; index < blocks.size(); index++) {
-				if(moveBlocks[index] != EMPTY_BLOCK){
-					if(checkIsMoveBlock(moveBlocks[index])){
-						moveBlock(index, moveBlocks[index], EDirection.RIGHT); 
-						moveBlock(index, moveBlocks[index], EDirection.LEFT); 
-					} 
-					player.setDead(checkDead(moveBlocks[index]));
+		
+			int[] moveBlocks = collisionWithBlocks(player.getRectH());
+			if(collisionWithBlock(player.getRectangle()) != EMPTY_BLOCK){
+				player.setNext(0, 0);
+				for (int index = 0; index < blocks.size(); index++) {
+					if(moveBlocks[index] != EMPTY_BLOCK){
+						if(checkIsMoveBlock(moveBlocks[index])){
+							moveBlock(index, moveBlocks[index], EDirection.RIGHT); 
+							moveBlock(index, moveBlocks[index], EDirection.LEFT); 
+						} 
+						player.setDead(checkDead(moveBlocks[index]));
+					}
 				}
 			}
-		}
-		if(collisionWithBlock(player.getRectangle()) == EMPTY_BLOCK){
-			player.newPositionX();
+			if(collisionWithBlock(player.getRectangle()) == EMPTY_BLOCK){
+				player.newPositionX();
+			}
 		}
 		
 		player.moveV();
@@ -202,15 +206,17 @@ public class MyWorld {
 	}
 	
 	private boolean checkIsMoveBlock(int index) {
-		return !blocks.get(index).isUp	&& (blocks.get(index).getY() - BOTTOM) % SIZE_BLOCK == 0;
+		return (!blocks.get(index).isUp	&& (blocks.get(index).getY() - BOTTOM) % SIZE_BLOCK == 0);
 	}
 	
 	private boolean checkDirection(int index, EDirection direction){
-		if(direction == EDirection.RIGHT && blocks.get(index).getX() > player.getX()){
-			return  true;
-		}
-		if(direction == EDirection.LEFT && blocks.get(index).getX() < player.getX()){
-			return true;
+		if(blocks.get(index).getY() == player.getY()){
+			if(direction == EDirection.RIGHT && blocks.get(index).getX() > player.getX()){
+				return  true;
+			}
+			if(direction == EDirection.LEFT && blocks.get(index).getX() < player.getX()){
+				return true;
+			}
 		}
 		return false;
 	}
@@ -236,10 +242,10 @@ public class MyWorld {
 		}
 		return 0;
 	}
-
+	
 	private boolean checkDead(int moveBlock) {
 		Block block = blocks.get(moveBlock);
-		return block.getY() >= player.getY()
+		return !block.isDown && block.getY() > player.getY()
 				&& ((block.getX() > player.getX() && block.getX() < player
 						.getX() + player.getWidth()) || (block.getX()
 						+ block.getWidth() > player.getX() && block.getX()

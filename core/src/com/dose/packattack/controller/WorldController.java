@@ -86,7 +86,7 @@ public class WorldController implements InputProcessor {
 			world.jumpPlayer();
 			directionVertical = EDirection.UP;
 		} 
-		if(touchButton(view.getButtonPause())){
+		if(touchButton2(view.getButtonPause())){
 			if(PAUSE){
 				PAUSE = false;
 			} else {
@@ -95,10 +95,10 @@ public class WorldController implements InputProcessor {
 		} 
 		
 		if(PAUSE){
-			if(touchButton(view.getPopapMenu().getButtonNext())){
+			if(touchButton2(view.getPopapMenu().getButtonNext())){
 				PAUSE = false;
 			}
-			if(touchButton(view.getPopapMenu().getButtonRetry())){
+			if(touchButton2(view.getPopapMenu().getButtonRetry())){
 				world.newGame();
 				PAUSE = false;
 			}
@@ -107,6 +107,16 @@ public class WorldController implements InputProcessor {
 	
 	public void newGame(){
 		world.newGame();
+	}
+	
+	private boolean touchButton2(JButton button){
+		if (button.getRectangle().intersects(rectangle)) {
+			button.setZoom(isTouch);
+			return (!isTouch)?true:false;
+		}else{
+			button.setZoom(false);
+			return false;
+		}	
 	}
 	
 	private boolean touchButton(JButton button){
