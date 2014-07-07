@@ -17,7 +17,7 @@ public class Pelican extends WorldObjectMove {
     }
 
     @Override
-    void animate() {
+	public void animate() {
 
         if (getX() % 8 == 0)
             countImage++;

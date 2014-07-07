@@ -18,12 +18,11 @@ public abstract class WorldObjectMove extends WorldObject{
         inversTexture = false;
     }
     
-    abstract void animate();
+    public abstract void animate();
 
-    public void setNext(int speedX, int speedY) {
-        setRectangle(new Rectangle(getX() + speedX, getY() + speedY,
-                getWidth(), getHeight()));
-    }
+	public void setNext(int speedX, int speedY) {
+		setRectangle(new Rectangle(x + speedX, y + speedY, width, height));
+	}
     
     public void newPosition(){
     	setX(getRectangle().getX());
@@ -62,6 +61,10 @@ public abstract class WorldObjectMove extends WorldObject{
         return SPEED;
     }
 
+    public int getCountImage(){
+		return countImage;
+	}
+    
     public boolean isInversTexture(){
         return inversTexture;
     }

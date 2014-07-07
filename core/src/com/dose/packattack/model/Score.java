@@ -18,6 +18,7 @@ public class Score {
 	private boolean isCounting;
 	private final int MAX_SCORE = 9999;
 	private int width;
+	private int height;
 	
 	public Score(Images imageWorld, int x, int y, int width, int height) {
 		numbers = new JNumber[SIZE];
@@ -28,6 +29,7 @@ public class Score {
 		this.x = x;
 		this.y = y;
 		this.width = width;
+		this.height = height;
 		timer = new Timer();
 		timer.scheduleTask(task, 0, 0.001f);
 		score = 0;

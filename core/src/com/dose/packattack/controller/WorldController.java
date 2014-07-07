@@ -1,6 +1,5 @@
 package com.dose.packattack.controller;
 
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Timer;
@@ -53,60 +52,75 @@ public class WorldController implements InputProcessor {
 
 	@Override
 	public boolean touchDown(int x, int y, int pointer, int button) {
-		touchButton(x, y, true);
+		touchButton(x, y, pointer, true);
 		return false;
 	}
 
 	@Override
 	public boolean touchDragged(int x, int y, int pointer) {
-		touchButton(x, y, true);
+		touchButton(x, y, pointer, true);
 		return true;
 	}
 
 	@Override
 	public boolean touchUp(int x, int y, int pointer, int button) {
-		touchButton(x, y, false);
+		touchButton(x, y, pointer, false);
 		return true;
 	}
 	
-	private void touchButton(int x, int y, boolean touch){
+	private void touchButton(int x, int y, int pointer, boolean touch){
 		
 		isTouch = touch;
 		rectangle = new Rectangle(x,Gdx.graphics.getHeight() - y , 2, 2);
-		
-		if(touchButton(view.getButtonLeft())){
-			directionHorizontal = EDirection.LEFT;
+//		setTouch(pointer, x, y, touch);
+		if(pointer == 0){
+			buttonsMove();
 		}
-		
-		if(touchButton(view.getButtonRight())){
-			directionHorizontal = EDirection.RIGHT;
-		} 
-		
-		if(touchButton(view.getButtonUp())){
-			world.jumpPlayer();
-			directionVertical = EDirection.UP;
-		} 
-		if(touchButton2(view.getButtonPause())){
-			if(PAUSE){
+		if(pointer == 1){
+			buttonsMove();
+		}
+
+		if (touchButton2(view.getButtonPause())) {
+			if (PAUSE) {
 				PAUSE = false;
 			} else {
 				PAUSE = true;
 			}
-		} 
+		}
+
+		if (PAUSE) {
+			if (touchButton2(view.getPopapMenu().getButtonNext())) {
+				if(world.getPlayer().isDead()){
+					newGame();
+				}
+				PAUSE = false;
+			}
+			if (touchButton2(view.getPopapMenu().getButtonRetry())) {
+				newGame();
+				PAUSE = false;
+			}
+		}
 		
-		if(PAUSE){
-			if(touchButton2(view.getPopapMenu().getButtonNext())){
-				PAUSE = false;
-			}
-			if(touchButton2(view.getPopapMenu().getButtonRetry())){
-				world.newGame();
-				PAUSE = false;
-			}
+	}
+
+	private void buttonsMove() {
+		if (touchButton(view.getButtonLeft())) {
+			directionHorizontal = EDirection.LEFT;
+		}
+
+		if (touchButton(view.getButtonRight())) {
+			directionHorizontal = EDirection.RIGHT;
+		}
+
+		if (touchButton(view.getButtonUp())) {
+					world.jumpPlayer();
+					directionVertical = EDirection.UP;
 		}
 	}
 	
 	public void newGame(){
 		world.newGame();
+		view.getScore().clear();
 	}
 	
 	private boolean touchButton2(JButton button){

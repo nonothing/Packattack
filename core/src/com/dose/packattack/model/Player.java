@@ -9,7 +9,7 @@ public class Player extends WorldObjectMove {
     
     private static final int MAX_COUNT_IMAGE = 6 * 8;
 	private static final int TIME_JUMP = 15;
-	
+	private boolean isHeart;
 	private boolean isDead;
     private int countHeightJump;
     
@@ -20,7 +20,7 @@ public class Player extends WorldObjectMove {
     }
 
     public boolean isGravity;
-    void animate() {
+    public void animate() {
         switch (countImage) {
         case 0:  setTexture(ETexture.PLAYER_1);            break;
         case 8:  setTexture(ETexture.PLAYER_2);            break;
@@ -76,9 +76,18 @@ public class Player extends WorldObjectMove {
         return isDead;
     }
 
-    public void setDead(boolean isDead) {
-        this.isDead = isDead;
+    public boolean isHeart(){
+    	return isHeart;
     }
+    
+	public void setDead(boolean isDead) {
+		if (isDead && isHeart) {
+			isHeart = false;
+		}
+		if (!isHeart) {
+			this.isDead = isDead;
+		}
+	}
     
     public Rectangle getRectH(){
     	return new Rectangle(getRectangle().getX(), getRectangle().getY(), getRectangle().getWigth(), getRectangle().getHeight() - getSPEED());

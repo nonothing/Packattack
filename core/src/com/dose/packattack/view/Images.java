@@ -46,6 +46,8 @@ public class Images {
 		textures.put(ETexture.PELICAN_4, loadTexture("dragon4"));
 
 		textures.put(ETexture.CUBE_WOOD, loadTexture("box"));
+		textures.put(ETexture.CUBE_METAL, loadTexture("box2"));
+		textures.put(ETexture.HEART, loadTexture("heart"));
 		textures.put(ETexture.POPAP_BACKGROUND, loadTexture("popap_background"));
 		
 	}

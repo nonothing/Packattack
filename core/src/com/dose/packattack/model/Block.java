@@ -73,7 +73,7 @@ public class Block extends WorldObjectMove {
 	}
 	
 	@Override
-	void animate() {
+	public void animate() {
 		// do nothing
 	}
 	

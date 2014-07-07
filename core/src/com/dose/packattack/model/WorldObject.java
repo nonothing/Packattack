@@ -5,12 +5,12 @@ import com.dose.packattack.enumerate.ETexture;
 
 public class WorldObject {
     
-    private int x;
-    private int y;
-    private int width;
-    private int height;
-    private Rectangle rectangle;
-    private ETexture texture;
+    protected int x;
+    protected int y;
+    protected int width;
+    protected int height;
+    protected Rectangle rectangle;
+    protected ETexture texture;
    
     public WorldObject(ETexture texture, int x, int y, int width, int height) {
         this.texture = texture;

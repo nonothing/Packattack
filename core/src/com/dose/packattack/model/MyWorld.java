@@ -2,9 +2,11 @@ package com.dose.packattack.model;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import com.dose.packattack.model.Rectangle;
 import com.dose.packattack.enumerate.EDirection;
 import com.dose.packattack.enumerate.ETexture;
+
 import static com.dose.packattack.controller.WorldController.PAUSE;
 import static com.dose.packattack.view.WorldRenderer.FULL_WIDTH;
 
@@ -16,6 +18,8 @@ public class MyWorld {
 	public static final int SIZE_BLOCK = 80;
 	
 	private ArrayList<Block> bufferBlocks = new ArrayList<Block>(20);
+	private Block boofBlock;
+	
 	private Player player;
 	private ArrayList<Block> blocks;
 	private ArrayList<Pelican> pelicans;
@@ -23,21 +27,22 @@ public class MyWorld {
 	private final Rectangle RECT2;
 	private final Random random;
 	private int score;
+	private boolean isHeart;
+	private int count;
 
 	public MyWorld() {
 		blocks = new ArrayList<Block>();
 		pelicans = new ArrayList<Pelican>();
-		player = new Player(ETexture.PLAYER_0, 80, 178, 80, 80);
 		random = new Random();
-		for (int i = 0; i < 5; i++)
-			createPelican();
 		
 		RECT= new Rectangle(0,140, FULL_WIDTH, 28);
 		RECT2= new Rectangle(0,140, FULL_WIDTH, 40);
-	}
+		newGame();
+		}
 
 	public void newGame(){
 		score = 0;
+		isHeart = false;
 		blocks.clear();
 		pelicans.clear();
 		player = new Player(ETexture.PLAYER_0, 80, 178, 80, 80);
@@ -54,14 +59,33 @@ public class MyWorld {
 	}
 
 	public void createBlock(int x, int y) {
-		if (new Random().nextInt(2) == 0) {
-			blocks.add(new Block(ETexture.CUBE_WOOD, x, y));
-			score += 15;
-		} else {
-			blocks.add(new Block(ETexture.CUBE_WOOD, x, y));
-			score += 25;
+		switch (random.nextInt(4)) {
+		case 1:
+			createBlock(ETexture.CUBE_WOOD, x, y, 15);
+			break;
+		case 2:
+			createBlock(ETexture.CUBE_METAL, x, y, 25);
+			break;
+		case 3:
+			count++;
+			if (!isHeart && !player.isHeart() && count >= 10) {
+				blocks.add(new BlockHeart(ETexture.HEART, x, y));
+				score += 5;
+				isHeart = true;
+				count = 0;
+			} else {
+				createBlock(ETexture.CUBE_WOOD, x, y, 15);
+			}
+			break;
+		default:
+			break;
 		}
 
+	}
+
+	private void createBlock(ETexture texture,int x, int y, int score) {
+		blocks.add(new Block(texture, x, y));
+		score += score;
 	}
 	
 	public void jumpPlayer(){
@@ -107,6 +131,9 @@ public class MyWorld {
 					if (blocks.get(i).getY() >= blocks.get(j).getY()) {
 						blocks.get(i).setDown(true);
 						blocks.get(j).setUp(true);
+						if(blocks.get(j).getTexture() == ETexture.HEART){
+							blocks.get(j).isDead = true;
+						}
 					}
 				} else {
 					if (blocks.get(j).getX() >= blocks.get(i).getX()) {
@@ -124,14 +151,22 @@ public class MyWorld {
 		}
 		return result;
 	}
-	
+
 	private void cheakLine(){
 		bufferBlocks.clear();
 		for(Block block: blocks){
+			if(block.isDead && block.getTexture() == ETexture.HEART && block.getCountImage() >= 360){
+				boofBlock = block;
+			}
 			if(block.getRectangle().intersects(RECT2)){
 				block.isDead = true;
 				bufferBlocks.add(block);
 			}
+		}
+		if(boofBlock != null){
+			blocks.remove(boofBlock);
+			boofBlock = null;
+			isHeart = false;
 		}
 		if(bufferBlocks.size() >= LINE_BLOCKS){
 			for(Block element: bufferBlocks){
@@ -187,8 +222,18 @@ public class MyWorld {
 				for (int index = 0; index < blocks.size(); index++) {
 					if(moveBlocks[index] != EMPTY_BLOCK){
 						if(checkIsMoveBlock(moveBlocks[index])){
-							moveBlock(index, moveBlocks[index], EDirection.RIGHT); 
-							moveBlock(index, moveBlocks[index], EDirection.LEFT); 
+							switch (blocks.get(moveBlocks[index]).getTexture()) {
+							case CUBE_WOOD:
+								moveBlock(index, moveBlocks[index], EDirection.RIGHT); 
+								moveBlock(index, moveBlocks[index], EDirection.LEFT);
+								break;
+							case HEART: 
+								blocks.remove(moveBlocks[index]);
+								break;
+							default:
+								break;
+							}
+							 
 						} 
 						player.setDead(checkDead(moveBlocks[index]));
 					}
@@ -244,9 +289,11 @@ public class MyWorld {
 	}
 	
 	private boolean checkDead(int moveBlock) {
+		if(moveBlock >= blocks.size())return false;
 		Block block = blocks.get(moveBlock);
+		if(block.getTexture() == ETexture.HEART) return false;
 		return !block.isDown && block.getY() > player.getY()
-				&& ((block.getX() > player.getX() && block.getX() < player
+				&& ((block.getX() >= player.getX() && block.getX() < player
 						.getX() + player.getWidth()) || (block.getX()
 						+ block.getWidth() > player.getX() && block.getX()
 						+ block.getWidth() < player.getX() + player.getWidth()));
