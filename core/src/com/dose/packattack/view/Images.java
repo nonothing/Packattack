@@ -13,13 +13,24 @@ public class Images {
 	public Images() {
 		textures = new HashMap<ETexture, Texture>();
 		textures.put(ETexture.BACKGROUND, loadTexture("background"));
-		textures.put(ETexture.PLAYER_0, loadTexture("player_0"));
-		textures.put(ETexture.PLAYER_1, loadTexture("player_1"));
-		textures.put(ETexture.PLAYER_2, loadTexture("player_2"));
-		textures.put(ETexture.PLAYER_3, loadTexture("player_3"));
-		textures.put(ETexture.PLAYER_4, loadTexture("player_4"));
-		textures.put(ETexture.PLAYER_5, loadTexture("player_5"));
-		textures.put(ETexture.PLAYER_6, loadTexture("player_6"));
+		textures.put(ETexture.PLAYER_STAY, loadPlayerTexture("player_stay"));
+		textures.put(ETexture.PLAYER_1, loadPlayerTexture("run/player_1"));
+		textures.put(ETexture.PLAYER_2, loadPlayerTexture("run/player_2"));
+		textures.put(ETexture.PLAYER_3, loadPlayerTexture("run/player_3"));
+		textures.put(ETexture.PLAYER_4, loadPlayerTexture("run/player_4"));
+		textures.put(ETexture.PLAYER_5, loadPlayerTexture("run/player_5"));
+		textures.put(ETexture.PLAYER_6, loadPlayerTexture("run/player_6"));
+		textures.put(ETexture.PLAYER_7, loadPlayerTexture("run/player_7"));
+		textures.put(ETexture.PLAYER_8, loadPlayerTexture("run/player_8"));
+		
+		textures.put(ETexture.PLAYER_MOVE_1, loadPlayerTexture("move/player_1"));
+		textures.put(ETexture.PLAYER_MOVE_2, loadPlayerTexture("move/player_2"));
+		textures.put(ETexture.PLAYER_MOVE_3, loadPlayerTexture("move/player_3"));
+		textures.put(ETexture.PLAYER_MOVE_4, loadPlayerTexture("move/player_4"));
+		textures.put(ETexture.PLAYER_MOVE_5, loadPlayerTexture("move/player_5"));
+		textures.put(ETexture.PLAYER_MOVE_6, loadPlayerTexture("move/player_6"));
+		textures.put(ETexture.PLAYER_MOVE_7, loadPlayerTexture("move/player_7"));
+		textures.put(ETexture.PLAYER_MOVE_8, loadPlayerTexture("move/player_8"));
 		
 		textures.put(ETexture.DIGITAL_0, loadTexture("number0"));
 		textures.put(ETexture.DIGITAL_1, loadTexture("number1"));
@@ -44,12 +55,19 @@ public class Images {
 		textures.put(ETexture.PELICAN_2, loadTexture("dragon2"));
 		textures.put(ETexture.PELICAN_3, loadTexture("dragon3"));
 		textures.put(ETexture.PELICAN_4, loadTexture("dragon4"));
-
+		
+		textures.put(ETexture.THREE, loadTexture("three"));
+		textures.put(ETexture.LAYER_1, loadTexture("layer1"));
+		textures.put(ETexture.LAYER_2, loadTexture("layer2"));
 		textures.put(ETexture.CUBE_WOOD, loadTexture("box"));
 		textures.put(ETexture.CUBE_METAL, loadTexture("box2"));
 		textures.put(ETexture.HEART, loadTexture("heart"));
 		textures.put(ETexture.POPAP_BACKGROUND, loadTexture("popap_background"));
 		
+	}
+	
+	private Texture loadPlayerTexture(String name){
+		return loadTexture("player/" + name);
 	}
 	
 	private Texture loadTexture(String name){

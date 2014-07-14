@@ -55,7 +55,9 @@ public class WorldRenderer implements Screen{
 		clear();
 		batch.begin();
 		batch.draw(images.getTexture(ETexture.BACKGROUND), 0, 0, cfg.getWidth(), cfg.getHeight());
-		
+		batch.draw(images.getTexture(ETexture.LAYER_1), 0, (int)(68 * cfg.getScaleY()), cfg.getWidth(), (int)(Math.ceil(245 * cfg.getScaleY())));
+		batch.draw(images.getTexture(ETexture.THREE), 0, (int)(313 * cfg.getScaleY()), (int)(545 * cfg.getScaleX()), (int)(425 * cfg.getScaleY()));
+		batch.draw(images.getTexture(ETexture.LAYER_2), 0, 0, cfg.getWidth(), (int)(212 * cfg.getScaleY()));
 		for(Pelican pelican : world.getPelicans()){
 			drawMoveObject(pelican);
 		}
@@ -63,7 +65,7 @@ public class WorldRenderer implements Screen{
 		for(Block block : world.getBlocks()){
 			drawMoveObject(block);
 		}
-		drawMoveObject(world.getPlayer());
+		drawPlayer(world.getPlayer(), 135, 157);
 		drawButton();
 		popapMenuRenderer.draw(batch);
 		score.draw(batch);
@@ -72,11 +74,17 @@ public class WorldRenderer implements Screen{
 //		drawDebug();
 	}
 
+	private int offsetY = (int)(10 *cfg.getScaleY());
 	private void drawDebug() {
 		renderer.begin(ShapeType.Line);
-		drawLinesObjct(world.getPlayer());
+		renderer.setColor(Color.BLUE);
+		drawLinesObjct(world.getPlayer().getRectH());
+		renderer.setColor(Color.GREEN);
+		drawLinesObjct(world.playerHeight);
+		renderer.setColor(Color.RED);
+		drawLinesObjct(world.getPlayer().getRectangle());
 		for(Block block : world.getBlocks()){
-			drawLinesObjct(block);
+			drawLinesObjct(block.getRectangle());
 		}
 		renderer.setColor(Color.BLACK);
 		
@@ -98,8 +106,7 @@ public class WorldRenderer implements Screen{
 				(float) buttonUp.getHeight(), 1, 1, 270);
 	}
 
-	private void drawLinesObjct(WorldObjectMove object){
-		Rectangle r = object.getRectangle();
+	private void drawLinesObjct(Rectangle r){
 		//crossroad
 		renderer.line(r.getX(), r.getY(), r.getX() + r.getWigth(),r.getY() + r.getHeight());
 		renderer.line(r.getX(), r.getY() + r.getHeight(), r.getX() + r.getWigth(),r.getY());
@@ -112,11 +119,27 @@ public class WorldRenderer implements Screen{
 		
 	}
 	
+	private void drawPlayer(WorldObjectMove object, int w, int h) {
+		if(!object.isInversTexture()){
+			batch.draw(images.getTexture(object.getTexture()),
+					(int)(object.getX()*cfg.getScaleX()) - (int)(17 * cfg.getScaleX()),
+					(int)(object.getY()*cfg.getScaleY()) - (int)(4 * cfg.getScaleY()),
+					(int)(w*cfg.getScaleX()),
+					(int)(h*cfg.getScaleY()));
+		} else {
+			batch.draw(images.getTexture(object.getTexture()),
+					(int)(object.getX()*cfg.getScaleX()) + (int)(w*cfg.getScaleX()) - (int)(38 * cfg.getScaleX()),
+					(int)(object.getY()*cfg.getScaleY()) - (int)(4 * cfg.getScaleY()),
+					(int)(-w*cfg.getScaleX()),
+					(int)(h*cfg.getScaleY()));
+		}
+	}
+	
 	private void drawMoveObject(WorldObjectMove object) {
 		if(!object.isInversTexture()){
 			batch.draw(images.getTexture(object.getTexture()),
 					(int)(object.getX()*cfg.getScaleX()),
-					(int)(object.getY()*cfg.getScaleY()),
+					(int)(object.getY()*cfg.getScaleY()) + offsetY,
 					(int)(object.getWidth()*cfg.getScaleX()),
 					(int)(object.getHeight()*cfg.getScaleY()));
 		} else {

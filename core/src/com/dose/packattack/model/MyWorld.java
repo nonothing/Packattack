@@ -45,7 +45,7 @@ public class MyWorld {
 		isHeart = false;
 		blocks.clear();
 		pelicans.clear();
-		player = new Player(ETexture.PLAYER_0, 80, 178, 80, 80);
+		player = new Player(ETexture.PLAYER_STAY, 80, 178, 80, 80);
 		player.setDead(false);
 		for (int i = 0; i < 5; i++){
 			createPelican();
@@ -95,7 +95,7 @@ public class MyWorld {
 	}
 
 	public void goPlayer(EDirection directionHorizonal,	EDirection directionVertical) {
-		
+		checkDead();
 		if(player.isDead()){
 			PAUSE = true;
 		}
@@ -201,6 +201,15 @@ public class MyWorld {
 		}
 		return EMPTY_BLOCK;
 	}
+	public Rectangle playerHeight = new Rectangle(0, 0, 1,	1);
+	public void checkDead(){
+		playerHeight = new Rectangle(player.getRectangle().getX(), player.getRectangle().getY() + 10, 80, 135);
+		for(Block block: blocks){
+			if(playerHeight.intersects(block.getRectangle())){
+				player.setDead(true);
+			}
+		}
+	}
 	
 	public boolean check(Rectangle rectangle){
 		for(Block block: blocks){
@@ -215,12 +224,14 @@ public class MyWorld {
 		if ((player.getY() - 174) % 76 < 10) {
 			player.setDirectionHorizontal(directionHorizonal);
 			player.moveH();
+			player.setRun(true);
 		
 			int[] moveBlocks = collisionWithBlocks(player.getRectH());
 			if(collisionWithBlock(player.getRectangle()) != EMPTY_BLOCK){
 				player.setNext(0, 0);
 				for (int index = 0; index < blocks.size(); index++) {
 					if(moveBlocks[index] != EMPTY_BLOCK){
+						player.setRun(false);
 						if(checkIsMoveBlock(moveBlocks[index])){
 							switch (blocks.get(moveBlocks[index]).getTexture()) {
 							case CUBE_WOOD:
@@ -235,7 +246,7 @@ public class MyWorld {
 							}
 							 
 						} 
-						player.setDead(checkDead(moveBlocks[index]));
+//						player.setDead(checkDead(moveBlocks[index]));
 					}
 				}
 			}

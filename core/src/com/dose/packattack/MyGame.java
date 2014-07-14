@@ -40,6 +40,7 @@ public class MyGame extends   Game  {
 			setScreen(logo);
 		}else{
 			changeMenu();
+//			changeGame();
 		}
 	}
 	

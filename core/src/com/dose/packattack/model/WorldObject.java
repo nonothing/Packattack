@@ -3,7 +3,7 @@ package com.dose.packattack.model;
 import com.dose.packattack.model.Rectangle;
 import com.dose.packattack.enumerate.ETexture;
 
-public class WorldObject {
+public abstract class WorldObject {
     
     protected int x;
     protected int y;
