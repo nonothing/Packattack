@@ -85,7 +85,7 @@ public class MyWorld {
 
 	private void createBlock(ETexture texture,int x, int y, int score) {
 		blocks.add(new Block(texture, x, y));
-		score += score;
+		this.score += score;
 	}
 	
 	public void jumpPlayer(){
@@ -222,34 +222,38 @@ public class MyWorld {
 	
 	private void movePlayer(EDirection directionHorizonal) {
 		if ((player.getY() - 174) % 76 < 10) {
-			player.setDirectionHorizontal(directionHorizonal);
+			if(player.isRun()){
+				player.setDirectionHorizontal(directionHorizonal);
+			}
 			player.moveH();
-			player.setRun(true);
-		
-			int[] moveBlocks = collisionWithBlocks(player.getRectH());
-			if(collisionWithBlock(player.getRectangle()) != EMPTY_BLOCK){
-				player.setNext(0, 0);
-				for (int index = 0; index < blocks.size(); index++) {
-					if(moveBlocks[index] != EMPTY_BLOCK){
-						player.setRun(false);
-						if(checkIsMoveBlock(moveBlocks[index])){
-							switch (blocks.get(moveBlocks[index]).getTexture()) {
-							case CUBE_WOOD:
-								moveBlock(index, moveBlocks[index], EDirection.RIGHT); 
-								moveBlock(index, moveBlocks[index], EDirection.LEFT);
-								break;
-							case HEART: 
-								blocks.remove(moveBlocks[index]);
-								break;
-							default:
-								break;
-							}
-							 
-						} 
+				int[] moveBlocks = collisionWithBlocks(player.getRectH());
+				if(collisionWithBlock(player.getRectangle()) != EMPTY_BLOCK){
+					player.setNext(0, 0);
+					for (int index = 0; index < blocks.size(); index++) {
+						if(moveBlocks[index] != EMPTY_BLOCK){
+							if(checkIsMoveBlock(moveBlocks[index])){
+								switch (blocks.get(moveBlocks[index]).getTexture()) {
+								case CUBE_WOOD:
+									if(player.isRun()){
+										moveBlock(index, moveBlocks[index], EDirection.RIGHT); 
+										moveBlock(index, moveBlocks[index], EDirection.LEFT);
+										if(blocks.get(moveBlocks[index]).getY() == player.getY()){
+											player.setRun(false);
+										}
+									}
+									break;
+								case HEART: 
+									blocks.remove(moveBlocks[index]);
+									break;
+								default:
+									break;
+								}
+								
+							} 
 //						player.setDead(checkDead(moveBlocks[index]));
+						}
 					}
 				}
-			}
 			if(collisionWithBlock(player.getRectangle()) == EMPTY_BLOCK){
 				player.newPositionX();
 			}
@@ -277,7 +281,8 @@ public class MyWorld {
 		return false;
 	}
 
-	private void moveBlock(int i, int moveBlock, EDirection direction) {
+	private boolean moveBlock(int i, int moveBlock, EDirection direction) {
+		Boolean result = false;
 		if(checkDirection(moveBlock, direction)){
 			blocks.get(moveBlock).isActive = true;
 			blocks.get(moveBlock).setDirectionHorizontal(direction);
@@ -285,8 +290,10 @@ public class MyWorld {
 			if(checkCollision(i, false)){
 				blocks.get(moveBlock).setNext(getSpeed(direction), 0);
 				blocks.get(moveBlock).newPositionX();
+				result = true;
 			}
 		}
+		return result;
 	}
 	
 	private int getSpeed(EDirection direction) {

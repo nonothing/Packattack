@@ -7,18 +7,20 @@ import static com.dose.packattack.view.WorldRenderer.FULL_WIDTH;
 
 public class Player extends WorldObjectMove {
     
-    private static final int MAX_COUNT_IMAGE = 8 * 8;
+    private static final int MAX_COUNT_IMAGE = 8 * 4;
 	private static final int TIME_JUMP = 15;
 	private boolean isHeart;
 	private boolean isDead;
     private int countHeightJump;
     private boolean isRun;
+    private int countStep;
     
     public Player(ETexture texture, int x, int y, int width, int height) {
         super(texture, x, y, width, height);
         setDirectionVertical(EDirection.DOWN);
         setDirectionHorizontal(EDirection.NONE);
         isRun = true;
+        countStep = 0;
     }
 
     public boolean isGravity;
@@ -26,26 +28,26 @@ public class Player extends WorldObjectMove {
     	if(isRun){
     		switch (countImage) {
     		case 0:  setTexture(ETexture.PLAYER_1);            break;
-    		case 8:  setTexture(ETexture.PLAYER_2);            break;
-    		case 16: setTexture(ETexture.PLAYER_3);            break;
-    		case 24: setTexture(ETexture.PLAYER_4);            break;
-    		case 32: setTexture(ETexture.PLAYER_5);            break;     
-    		case 40: setTexture(ETexture.PLAYER_6);            break;
-    		case 48: setTexture(ETexture.PLAYER_7);            break;
-    		case 56: setTexture(ETexture.PLAYER_8);            break;
+    		case 4:  setTexture(ETexture.PLAYER_2);            break;
+    		case 8: setTexture(ETexture.PLAYER_3);            break;
+    		case 12: setTexture(ETexture.PLAYER_4);            break;
+    		case 16: setTexture(ETexture.PLAYER_5);            break;     
+    		case 20: setTexture(ETexture.PLAYER_6);            break;
+    		case 24: setTexture(ETexture.PLAYER_7);            break;
+    		case 28: setTexture(ETexture.PLAYER_8);            break;
     		default:
     			break;
     		}
     	} else {
     		switch (countImage) {
     		case 0:  setTexture(ETexture.PLAYER_MOVE_1);            break;
-    		case 8:  setTexture(ETexture.PLAYER_MOVE_2);            break;
-    		case 16: setTexture(ETexture.PLAYER_MOVE_3);            break;
-    		case 24: setTexture(ETexture.PLAYER_MOVE_4);            break;
-    		case 32: setTexture(ETexture.PLAYER_MOVE_5);            break;     
-    		case 40: setTexture(ETexture.PLAYER_MOVE_6);            break;
-    		case 48: setTexture(ETexture.PLAYER_MOVE_7);            break;
-    		case 56: setTexture(ETexture.PLAYER_MOVE_8);            break;
+    		case 4:  setTexture(ETexture.PLAYER_MOVE_2);            break;
+    		case 8: setTexture(ETexture.PLAYER_MOVE_3);            break;
+    		case 12: setTexture(ETexture.PLAYER_MOVE_4);            break;
+    		case 16: setTexture(ETexture.PLAYER_MOVE_5);            break;     
+    		case 20: setTexture(ETexture.PLAYER_MOVE_6);            break;
+    		case 24: setTexture(ETexture.PLAYER_MOVE_7);            break;
+    		case 28: setTexture(ETexture.PLAYER_MOVE_8);            break;
     		default:
     			break;
     		}
@@ -63,16 +65,24 @@ public class Player extends WorldObjectMove {
     	} else {
     		setTexture(ETexture.PLAYER_STAY);
     	}
-    	
-        if (getDirectionHorizontal() == EDirection.RIGHT && getX() < FULL_WIDTH - getWidth()) {
-            setNext(getSPEED(), 0);
-            inversTexture = false;
-        }
-        
-        if (getDirectionHorizontal() == EDirection.LEFT && getX() > 0) {
-            setNext(inverse(getSPEED()), 0);
-            inversTexture = true;
-        }
+	        if (getDirectionHorizontal() == EDirection.RIGHT && getX() < FULL_WIDTH - getWidth()) {
+	            setNext(getSPEED(), 0);
+	            inversTexture = false;
+	        }
+	        
+	        if (getDirectionHorizontal() == EDirection.LEFT && getX() > 0) {
+	            setNext(inverse(getSPEED()), 0);
+	            inversTexture = true;
+	        }
+	        
+	       if(!isRun){
+	    	   countStep++;
+	    	   if(countStep >= 20){
+	    		   countStep = 0;
+	    		   isRun = true;
+	    		   setDirectionHorizontal(EDirection.NONE);
+	    	   }
+	       }
        
     }
     
@@ -111,6 +121,10 @@ public class Player extends WorldObjectMove {
 	
 	public void setRun(boolean run){
 		isRun = run;
+	}
+	
+	public boolean isRun(){
+		return isRun;
 	}
 	
 	public Rectangle getRectH(){

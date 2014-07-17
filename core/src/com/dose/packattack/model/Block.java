@@ -14,7 +14,6 @@ public class Block extends WorldObjectMove {
 	public boolean isUp;
 	public boolean isActive;
     public boolean isDead;
-    
     public Block(ETexture texture, int x, int y) {
         super(texture, x, y, SIZE_BLOCK, SIZE_BLOCK);
         setDirectionHorizontal(EDirection.NONE);
@@ -29,8 +28,7 @@ public class Block extends WorldObjectMove {
 				isActive = false;
 			}
 		}
-		if (!isRight && getDirectionHorizontal() == EDirection.RIGHT
-				&& isActive) {
+		if (!isRight && getDirectionHorizontal() == EDirection.RIGHT && isActive) {
 			if (getX() < FULL_WIDTH - getWidth())
 				setNext(getSPEED(), 0);
 			if (getRectangle().getX() % SIZE_BLOCK == 0) {

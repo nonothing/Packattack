@@ -102,7 +102,7 @@ public class WorldController implements InputProcessor {
 		}
 		
 	}
-
+	
 	private void buttonsMove() {
 		if (touchButton(view.getButtonLeft())) {
 			directionHorizontal = EDirection.LEFT;
@@ -113,8 +113,8 @@ public class WorldController implements InputProcessor {
 		}
 
 		if (touchButton(view.getButtonUp())) {
-					world.jumpPlayer();
-					directionVertical = EDirection.UP;
+			world.jumpPlayer();
+			directionVertical = EDirection.UP;
 		}
 	}
 	
